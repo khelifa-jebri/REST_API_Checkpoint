@@ -6,14 +6,7 @@ module.exports = {
     async addUser(req, res) {
         try {
             const { firstName, lastName, phoneNumber, email } = req.body;
-
-            try {
-                const newUser = User.create({ firstName, lastName, phoneNumber, email });
-            } catch (err) {
-                console.log(err);
-                return err;
-            }
-
+            const newUser = User.create({ firstName, lastName, phoneNumber, email });
             res.status(201).json({
                 status: true,
                 message: "user added successfully",
@@ -27,14 +20,8 @@ module.exports = {
     //Service for getting all users
     async getAllUser(req, res) {
         try {
-            try {
-                UserList = await User.find();
-            } catch (err) {
-                console.log(err);
-                return err;
-            }
-            res
-                .status(200)
+            UserList = await User.find();
+            res.status(200)
                 .json({ status: true, message: "User list", data: UserList });
         } catch (err) {
             console.log(err);
@@ -46,14 +33,8 @@ module.exports = {
     async deleteUser(req, res) {
         try {
             const { id } = req.params;
-            try {
-                await User.findByIdAndRemove(id);
-            } catch (err) {
-                console.log(err);
-                return err;
-            }
-            res
-                .status(200)
+            await User.findByIdAndRemove(id);
+            res.status(200)
                 .json({ status: true, message: "user deleted successfully" });
 
         } catch (err) {
@@ -65,20 +46,15 @@ module.exports = {
     //Service for update a user by id
     async updateUser(req, res) {
         try {
+
             const { id } = req.params;
             const { firstName, lastName, phoneNumber, email } = req.body;
-
-            try {
-                await User.findByIdAndUpdate(id, {
-                    firstName,
-                    lastName,
-                    phoneNumber,
-                    email,
-                });
-            } catch (err) {
-                console.log(err);
-                return err;
-            }
+            await User.findByIdAndUpdate(id, {
+                firstName,
+                lastName,
+                phoneNumber,
+                email,
+            });
 
             existingUser = await User.findById(id);
 
