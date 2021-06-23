@@ -6,13 +6,13 @@ module.exports = {
     async addUser(req, res) {
         try {
             const { firstName, lastName, phoneNumber, email } = req.body;
-            const newUser = User.create({ firstName, lastName, phoneNumber, email });
+            const newUser = await User.create({ firstName, lastName, phoneNumber, email });
             res.status(201).json({
                 status: true,
                 message: "user added successfully",
             });
         } catch (err) {
-            res.status(500).json({ status: false, message: err });
+            res.status(500).json({ status: false, message: err, data: newUser });
             console.log(err);
         }
     },
@@ -20,7 +20,7 @@ module.exports = {
     //Service for getting all users
     async getAllUser(req, res) {
         try {
-            UserList = await User.find();
+            const UserList = await User.find();
             res.status(200)
                 .json({ status: true, message: "User list", data: UserList });
         } catch (err) {
