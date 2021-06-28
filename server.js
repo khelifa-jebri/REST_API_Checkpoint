@@ -1,47 +1,23 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const router = require("express").Router();
-const Service = require("./services/Services")
+
 require("dotenv").config({ path: "./config/.env" });
+const ConnectDB = require("./config/ConnectDB");
 
 const app = express();
 
-// Connecting to Data Base
-mongoose.connect(process.env.MONGODB_URL, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => console.log("Connection Successfully ..."))
-    .catch((err) => console.log(err));
-
+//Middelwares
 app.use(express.json());
 
-
-router.get(
-    "/userList",
-    Service.getAllUser
-);
-
-router.post(
-    "/createUser",
-    Service.addUser
-);
-
-router.put(
-    "/editUser/:id",
-    Service.updateUser
-);
-
-router.delete(
-    "/deleteUser/:id",
-    Service.deleteUser
-);
-
-app.use("/api", router);
-
-const PORT = 5000 || process.env.PORT;
+//Creating server
+const PORT = process.env.PORT || 5000;
 
 app.listen(process.env.PORT, (err) => {
     if (err) throw err;
     console.log(`server started on port ${PORT}`);
 });
+
+// Connecting to Data Base
+ConnectDB();
+
+//connecting the routes (CRUD)
+app.use("/api/users/", require("./routes/user"));
